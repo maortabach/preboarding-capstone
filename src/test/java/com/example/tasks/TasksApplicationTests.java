@@ -246,4 +246,32 @@ class TasksApplicationTests {
 		mockMvc.perform(delete("/tasks/999"))
 				.andExpect(status().isNotFound());
 	}
+
+	/**
+	 * Tests GET /tasks/count returning the total and done task counts.
+	 * Edge cases:
+	 * - Returns 200 OK with total and done count matching current state.
+	 * - Verifies literal path /tasks/count does not match /tasks/{id} (which would expect a numeric ID).
+	 */
+	@Test
+	@Order(16)
+	void getTasksCountSuccess() throws Exception {
+		mockMvc.perform(get("/tasks/count"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.total").value(3))
+				.andExpect(jsonPath("$.done").value(1));
+	}
+
+	/**
+	 * Tests POST /tasks/count to ensure invalid HTTP method is rejected.
+	 * Edge cases:
+	 * - Returns 405 Method Not Allowed as /tasks/count only supports GET.
+	 */
+	@Test
+	@Order(17)
+	void getTasksCountMethodNotAllowed() throws Exception {
+		mockMvc.perform(post("/tasks/count"))
+				.andExpect(status().isMethodNotAllowed());
+	}
 }

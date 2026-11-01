@@ -55,6 +55,22 @@ public class TaskService {
     }
 
     /**
+     * Calculates the total number of tasks and the number of completed tasks.
+     * Reuses getTasks(true) to avoid redundant filtering logic.
+     * Edge cases:
+     * - No tasks exist: returns TaskCount(0, 0).
+     * - All tasks completed: returns TaskCount(total, total).
+     * - No tasks completed: returns TaskCount(total, 0).
+     *
+     * @return TaskCount with total and done counts
+     */
+    public TaskCount getTaskCount() {
+        long total = tasksMap.size();
+        long done = getTasks(true).size();
+        return new TaskCount(total, done);
+    }
+
+    /**
      * Retrieves a task by its unique identifier.
      * Edge cases:
      * - id not found: throws TaskNotFoundException (mapped to 404 Not Found).
