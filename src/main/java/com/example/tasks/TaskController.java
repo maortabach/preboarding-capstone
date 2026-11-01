@@ -39,6 +39,19 @@ public class TaskController {
     }
 
     /**
+     * Retrieves the count of all tasks and completed tasks.
+     * Edge cases:
+     * - No tasks exist: returns 200 OK with total = 0, done = 0.
+     * - Literal path /tasks/count takes precedence over /tasks/{id}.
+     *
+     * @return 200 OK with TaskCount summary
+     */
+    @GetMapping("/tasks/count")
+    public TaskCount getTaskCount() {
+        return taskService.getTaskCount();
+    }
+
+    /**
      * Retrieves a task by its ID.
      * Edge cases:
      * - Task ID not found: throws TaskNotFoundException (404 Not Found).
